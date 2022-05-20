@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Code Editro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://codemirror.net/lib/codemirror.css'>
+    <link rel='stylesheet' href='https://codemirror.net/addon/hint/show-hint.css'>
+    <link rel='stylesheet' href='https://codemirror.net/addon/dialog/dialog.css'>
+    <link rel='stylesheet' href='https://codemirror.net/addon/search/matchesonscrollbar.css'>
+    <link rel='stylesheet' href='https://codemirror.net/addon/lint/lint.css'>
+    <!-- Themes -->
+    <link rel='stylesheet' href='https://codemirror.net/theme/monokai.css'>
+    <link rel='stylesheet' href='https://codemirror.net/theme/dracula.css'>
+    <link rel='stylesheet' href='https://codemirror.net/theme/eclipse.css'>
+    <link rel='stylesheet' href='https://codemirror.net/theme/material.css'>
+    <link rel='stylesheet' href='https://codemirror.net/theme/ambiance.css'>
+    <link rel='stylesheet' href='https://codemirror.net/theme/neo.css'>
+    <link rel='stylesheet' href='https://codemirror.net/theme/seti.css'>
+    <link rel='stylesheet' href='./ttcn.css'>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div id="main">
+<div id="lanBar">
+    <a active href="./index.html">html</a>
+    <a href="#">css</a>
+    <a href="#">js</a>
+</div>
+<div id="codeBar">
+<div id="tabs"> <!-- Tabs -->
+    <label class="radio"><input type="radio" name="html" checked  onclick="setHtml('TabA1')"><span>One.html</span></label>
+    <label class="radio"><input type="radio" name="html" onclick="setHtml('TabA2')"><span>Two.html</span></label>
+    <label class="radio"><input type="radio" name="html" onclick="setHtml('TabA3')"><span>Three.html</span></label>
+</div>
+<div id="codeView">
+    <div id="codeIn"><textarea id="codeBlock"></textarea></div>
+    <div id="codeOut">
+        <iframe id="output" class="box"></iframe>
+    </div>
+</div>
+</div>
+</div>
+<div id="status">
+    <button onclick="fontBig()" id="fontBig">+</button>
+    <button onclick="fontSmall()" id="fontSmall">-</button>
+    <button onclick="rotate()" id="rotate">↻</button>
+    <button onclick="wrap()" id="wrap">⇏</button>
+    <button onclick="search()" id="search">&#x1F50E;&#xFE0E;</button>
+    <button onClick="javascript:window.open('https://docs.emmet.io/cheat-sheet/', '_blank');" id="emmet">Emmet</button>
+    <button onclick="mode()" id="mode">☼</button>
+    <select id="themeSelect" onchange="changeTheme()">
+        <option value="1">Monokai</option>
+        <option value="2">CodeMirror</option>
+        <option value="3">Dracula</option>
+        <option value="4">Eclipse</option>
+        <option value="5">Material</option>
+        <option value="6">Ambiance</option>
+        <option value="7">Neo</option>
+        <option value="8">Seti</option>
+        <option value="9">Chrome</option>
+    </select>
+    <div id="language">HTML</div>
+    <button onclick="runs()" id="runs">Run</button>
+    <button onclick="preview()" id="preview">❯</button>
+</div>
+<!-- Codemirror Languages -->
+<script src='https://codemirror.net/lib/codemirror.js'></script>
+<script src='https://codemirror.net/addon/fold/xml-fold.js'></script>
+<script src='https://codemirror.net/mode/xml/xml.js'></script>
+<script src='https://codemirror.net/mode/css/css.js'></script>
+<script src='https://codemirror.net/mode/javascript/javascript.js'></script>
+<script src='https://codemirror.net/mode/htmlmixed/htmlmixed.js'></script>
+<!-- highlight two matching tag -->
+<script src='https://codemirror.net/addon/edit/matchtags.js'></script>
+<!-- auto close brackets -->
+<script src='https://codemirror.net/addon/edit/closebrackets.js'></script>
+<!-- auto close tag -->
+<script src='https://codemirror.net/addon/edit/closetag.js'></script>
+<!-- highlight two matching bracket -->
+<script src='https://codemirror.net/addon/edit/matchbrackets.js'></script>
+<!-- highlight match word -->
+<script src='https://codemirror.net/3/addon/search/match-highlighter.js'></script>
+<!-- autocomplete hint -->
+<script src='https://codemirror.net/addon/hint/show-hint.js'></script>
+<script src='https://codemirror.net/addon/hint/xml-hint.js'></script>
+<script src='https://codemirror.net/addon/hint/html-hint.js'></script>
+<script src='https://codemirror.net/addon/hint/css-hint.js'></script>
+<script src='https://codemirror.net/addon/hint/javascript-hint.js'></script>
+
+<!-- in document autocomplete hint
+    <script src='https://codemirror.net/3/addon/hint/anyword-hint.js'></script> -->
+<!-- searching -->
+<script src='https://codemirror.net/addon/search/search.js'></script>
+<script src="https://codemirror.net/addon/dialog/dialog.js"></script>
+<script src="https://codemirror.net/addon/search/searchcursor.js"></script>
+<script src="https://codemirror.net/addon/search/jump-to-line.js"></script>
+<script src="https://codemirror.net/addon/scroll/annotatescrollbar.js"></script>
+<script src="https://codemirror.net/addon/search/matchesonscrollbar.js"></script>
+
+<!-- error linting -->
+<script src='https://codemirror.net/addon/lint/lint.js'></script>
+<script src='./htmlmixed-lint.js'></script>
+<script src='./htmlhint.js'></script>
+<script src='https://codemirror.net/addon/lint/css-lint.js'></script>
+<script src="https://unpkg.com/csslint@1.0.5/dist/csslint.js"></script>
+<script src='https://codemirror.net/addon/lint/javascript-lint.js'></script>
+<script src="https://unpkg.com/jshint@2.13.2/dist/jshint.js"></script>
+<script src='https://codemirror.net/addon/lint/json-lint.js'></script>
+<script src="https://unpkg.com/jsonlint@1.6.3/web/jsonlint.js"></script>
+
+<script src="./emmet.js"></script>
+
+<script src="ttps://stacksnippets.net/scripts/snippet-javascript-console.min.js?v=1"></script>
+
+<!-- <script src="./console-log.js"></script>  -->
+<script src="./script.js"></script>
+</body></html>
